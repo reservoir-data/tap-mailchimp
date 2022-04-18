@@ -24,7 +24,7 @@ flake8 = "^4.0.1"
 black = "^22.3"
 pydocstyle = "^6.1.1"
 mypy = "^0.942"
-types-requests = "^2.27.16"
+types-requests = "^2.27.19"
 isort = "^5.9.3"
 
 [tool.black]
