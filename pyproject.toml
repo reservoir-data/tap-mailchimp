@@ -20,7 +20,7 @@ requests-cache = "==0.9.5"
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"
 tox = "^3.25.1"
-flake8 = "^5.0.3"
+flake8 = "^5.0.4"
 black = "^22.6"
 pydocstyle = "^6.1.1"
 mypy = "^0.971"
