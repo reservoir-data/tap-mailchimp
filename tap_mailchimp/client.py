@@ -1,8 +1,14 @@
-from typing import List, Optional
+"""Mailchimp tap HTTP client."""
 
-import requests
+from __future__ import annotations
+
+import typing as t
+
 from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.streams import RESTStream
+
+if t.TYPE_CHECKING:
+    import requests
 
 
 class MailchimpStream(RESTStream):
@@ -29,7 +35,12 @@ class MailchimpStream(RESTStream):
             password=self.config["api_key"],
         )
 
-    def get_url_params(self, context, next_page_token: int):
+    def get_url_params(
+        self,
+        context: dict | None,  # noqa: ARG002
+        next_page_token: int,
+    ) -> dict[str, t.Any]:
+        """Get URL query parameters for Mailchimp streams."""
         self.logger.info("Page offset %s", next_page_token)
 
         fields = self.selected_fields
@@ -41,7 +52,7 @@ class MailchimpStream(RESTStream):
         }
 
     @property
-    def selected_fields(self) -> List[str]:
+    def selected_fields(self) -> list[str]:
         """Get selected fields from the input catalog.
 
         Returns:
@@ -53,14 +64,14 @@ class MailchimpStream(RESTStream):
                 for breadcrumb, selected in self.mask.items()
                 if selected
             ]
-        else:
-            return []
+
+        return []
 
     def get_next_page_token(
         self,
         response: requests.Response,
-        previous_token: Optional[int],
-    ) -> int:
+        previous_token: int | None,
+    ) -> int | None:
         """Return a token for identifying next page or None if no more pages."""
         current_offset = previous_token or 0
         count = len(response.json()[self.name])

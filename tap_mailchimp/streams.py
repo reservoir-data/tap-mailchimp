@@ -1,3 +1,7 @@
+"""Singer streams for Mailchimp."""
+
+from __future__ import annotations
+
 from tap_mailchimp.client import MailchimpStream
 
 
@@ -7,7 +11,12 @@ class ListsStream(MailchimpStream):
     name = "lists"
     path = "/lists"
 
-    def get_child_context(self, record: dict, context) -> dict:
+    def get_child_context(
+        self,
+        record: dict,
+        context: dict | None,  # noqa: ARG002
+    ) -> dict:
+        """Get the child context for child streams."""
         return {"list_id": record["id"]}
 
 

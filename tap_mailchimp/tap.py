@@ -40,10 +40,11 @@ class TapMailchimp(Tap):
         th.Property(
             "server",
             th.StringType,
+            required=True,
             description=(
                 "To find the value for the server parameter used in "
                 "`mailchimp.setConfig`, log into your Mailchimp account and "
-                "look at the URL in your browser. You’ll see something like "
+                "look at the URL in your browser. You`ll see something like "
                 "`https://us19.admin.mailchimp.com/`; the `us19` part is the server "
                 "prefix. Note that your specific value may be different."
             ),
@@ -55,13 +56,13 @@ class TapMailchimp(Tap):
         ),
     ).to_dict()
 
-    def get_openapi_schema(self):
+    def get_openapi_schema(self) -> dict:
         """Retrieve Swagger/OpenAPI schema for this API.
 
         Returns:
             OpenAPI schema.
         """
-        return requests.get(OPENAPI_URL).json()
+        return requests.get(OPENAPI_URL, timeout=10).json()
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
