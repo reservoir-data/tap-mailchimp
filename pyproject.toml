@@ -9,23 +9,16 @@ keywords = [
     "ELT",
     "Mailchimp",
 ]
-license = "Apache 2.0"
+license = "Apache-2.0"
 
 [tool.poetry.dependencies]
-python = "<3.11,>=3.7.1"
+python = "<3.12,>=3.7.1"
 singer-sdk = "==0.26.0"
 toolz = "==0.12.0"
 requests-cache = "==1.0.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.3.1"
-tox = "^3.28.0"
-flake8 = "^5.0.4"
-black = "^23.3"
-pydocstyle = "^6.3.0"
-mypy = "^1.2"
-types-requests = "^2.29.0"
-isort = "^5.11.5"
 
 [tool.black]
 line-length = 88
@@ -42,3 +35,20 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.scripts]
 # CLI declaration
 tap-mailchimp = 'tap_mailchimp.tap:TapMailchimp.cli'
+
+[tool.ruff]
+ignore = ["ANN101", "DJ", "PD"]
+line-length = 88
+select = ["ALL"]
+src = ["tap_mailchimp", "tests", "noxfile.py"]
+target-version = "py37"
+
+[tool.ruff.isort]
+known-first-party = ["tap_mailchimp"]
+
+[tool.ruff.per-file-ignores]
+"noxfile.py" = ["ANN"]
+"tests/*" = ["ANN"]
+
+[tool.ruff.pydocstyle]
+convention = "google"
