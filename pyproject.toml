@@ -13,9 +13,9 @@ license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "<3.12,>=3.7.1"
-singer-sdk = "==0.28.0"
-toolz = "==0.12.0"
-requests-cache = "==1.1.0"
+singer-sdk = "==0.28.*"
+toolz = "==0.12.*"
+requests-cache = "==1.1.*"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.4.0"
