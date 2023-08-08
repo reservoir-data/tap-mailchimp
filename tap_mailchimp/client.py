@@ -5,16 +5,45 @@ from __future__ import annotations
 import typing as t
 
 from singer_sdk.authenticators import BasicAuthenticator
+from singer_sdk.pagination import BaseOffsetPaginator
 from singer_sdk.streams import RESTStream
 
 if t.TYPE_CHECKING:
     import requests
 
 
+class MailchimpPaginator(BaseOffsetPaginator):
+    """Mailchimp paginator."""
+
+    def __init__(self, *args: t.Any, name: str, **kwargs: t.Any) -> None:
+        """Initialize Mailchimp paginator.
+
+        Args:
+            *args: Positional arguments.
+            name: Name of the entity to paginate.
+            **kwargs: Keyword arguments.
+        """
+        super().__init__(*args, **kwargs)
+        self.name = name
+
+    def has_more(self, response: requests.Response) -> bool:
+        """Whether there are more pages to paginate.
+
+        Args:
+            response: HTTP response.
+
+        Returns:
+            True if there are more pages to paginate, False otherwise.
+        """
+        count = len(response.json()[self.name])
+        current_offset = self.current_value
+        return current_offset + self._page_size if count == self._page_size else None
+
+
 class MailchimpStream(RESTStream):
     """Base stream class for all Mailchimp resources."""
 
-    primary_keys = ["id"]
+    primary_keys = ["id"]  # noqa: RUF012
 
     @property
     def url_base(self) -> str:
@@ -67,17 +96,10 @@ class MailchimpStream(RESTStream):
 
         return []
 
-    def get_next_page_token(
-        self,
-        response: requests.Response,
-        previous_token: int | None,
-    ) -> int | None:
-        """Return a token for identifying next page or None if no more pages."""
-        current_offset = previous_token or 0
-        count = len(response.json()[self.name])
-        self.logger.info("Record count %s", count)
-
-        if count == self._page_size:
-            return current_offset + self._page_size
-
-        return None
+    def get_new_paginator(self) -> MailchimpPaginator:
+        """Return a new paginator object."""
+        return MailchimpPaginator(
+            start_value=0,
+            page_size=self._page_size,
+            name=self.name,
+        )
