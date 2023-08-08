@@ -33,7 +33,7 @@ class MergeFieldsStream(MailchimpStream):
 
     name = "merge_fields"
     path = "/lists/{list_id}/merge-fields"
-    primary_keys = ["merge_id"]
+    primary_keys = ["merge_id"]  # noqa: RUF012
     parent_stream_type = ListsStream
 
 

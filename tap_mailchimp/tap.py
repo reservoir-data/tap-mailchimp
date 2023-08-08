@@ -1,6 +1,8 @@
 """Mailchimp tap class."""
 
-from typing import List, Type
+from __future__ import annotations
+
+import typing as t
 
 import requests
 import requests_cache
@@ -8,24 +10,19 @@ from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
 from toolz.dicttoolz import get_in
 
-from tap_mailchimp.client import MailchimpStream
-from tap_mailchimp.streams import (
-    CampaignsStream,
-    ConversationsStream,
-    ListsStream,
-    MembersStream,
-    MergeFieldsStream,
-    TemplatesStream,
-)
+from tap_mailchimp import streams
+
+if t.TYPE_CHECKING:
+    from tap_mailchimp.client import MailchimpStream
 
 OPENAPI_URL = "https://api.mailchimp.com/schema/3.0/Swagger.json?expand"
-STREAM_TYPES: List[Type[MailchimpStream]] = [
-    CampaignsStream,
-    ConversationsStream,
-    ListsStream,
-    MembersStream,
-    MergeFieldsStream,
-    TemplatesStream,
+STREAM_TYPES: list[type[MailchimpStream]] = [
+    streams.CampaignsStream,
+    streams.ConversationsStream,
+    streams.ListsStream,
+    streams.MembersStream,
+    streams.MergeFieldsStream,
+    streams.TemplatesStream,
 ]
 
 requests_cache.install_cache("requests_cache")
@@ -64,11 +61,11 @@ class TapMailchimp(Tap):
         """
         return requests.get(OPENAPI_URL, timeout=10).json()
 
-    def discover_streams(self) -> List[Stream]:
+    def discover_streams(self) -> list[Stream]:
         """Return a list of discovered streams."""
         openapi_schema = self.get_openapi_schema()
 
-        streams: List[MailchimpStream] = []
+        streams: list[MailchimpStream] = []
         for stream_type in STREAM_TYPES:
             schema = get_in(
                 keys=[
