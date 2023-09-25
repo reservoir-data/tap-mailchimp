@@ -13,7 +13,7 @@ license = "Apache-2.0"
 
 [tool.poetry.dependencies]
 python = "<3.12,>=3.7.1"
-singer-sdk = "==0.31.*"
+singer-sdk = "==0.32.*"
 toolz = "==0.12.*"
 requests-cache = "==1.1.*"
 
