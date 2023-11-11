@@ -15,6 +15,7 @@ from tap_mailchimp import streams
 if t.TYPE_CHECKING:
     from tap_mailchimp.client import MailchimpStream
 
+
 OPENAPI_URL = "https://api.mailchimp.com/schema/3.0/Swagger.json?expand"
 STREAM_TYPES: list[type[MailchimpStream]] = [
     streams.CampaignsStream,

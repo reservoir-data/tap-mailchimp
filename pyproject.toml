@@ -46,15 +46,15 @@ ignore = [
 ]
 select = ["ALL"]
 
-[tool.ruff.flake8-annotations]
+[tool.ruff.lint.flake8-annotations]
 allow-star-arg-any = true
 
-[tool.ruff.isort]
+[tool.ruff.lint.isort]
 known-first-party = ["tap_mailchimp"]
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "noxfile.py" = ["ANN"]
 "tests/*" = ["ANN"]
 
-[tool.ruff.pydocstyle]
+[tool.ruff.lint.pydocstyle]
 convention = "google"

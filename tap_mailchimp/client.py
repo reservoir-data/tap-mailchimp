@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import typing as t
 
-from singer_sdk.authenticators import BasicAuthenticator
+from requests.auth import HTTPBasicAuth
 from singer_sdk.pagination import BaseOffsetPaginator
 from singer_sdk.streams import RESTStream
 
@@ -43,7 +43,7 @@ class MailchimpPaginator(BaseOffsetPaginator):
 class MailchimpStream(RESTStream):
     """Base stream class for all Mailchimp resources."""
 
-    primary_keys = ["id"]  # noqa: RUF012
+    primary_keys: t.ClassVar[list[str]] = ["id"]
 
     @property
     def url_base(self) -> str:
@@ -56,13 +56,9 @@ class MailchimpStream(RESTStream):
         return f"$.{self.name}[*]"
 
     @property
-    def authenticator(self) -> BasicAuthenticator:
+    def authenticator(self) -> HTTPBasicAuth:
         """Return a new authenticator object."""
-        return BasicAuthenticator.create_for_stream(
-            self,
-            username="anystring",
-            password=self.config["api_key"],
-        )
+        return HTTPBasicAuth(username="anystring", password=self.config["api_key"])
 
     def get_url_params(
         self,

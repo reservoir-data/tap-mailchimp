@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import typing as t
+
 from tap_mailchimp.client import MailchimpStream
 
 
@@ -33,7 +35,7 @@ class MergeFieldsStream(MailchimpStream):
 
     name = "merge_fields"
     path = "/lists/{list_id}/merge-fields"
-    primary_keys = ["merge_id"]  # noqa: RUF012
+    primary_keys: t.ClassVar[list[str]] = ["merge_id"]
     parent_stream_type = ListsStream
 
 
