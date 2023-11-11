@@ -34,7 +34,7 @@ tap-mailchimp = 'tap_mailchimp.tap:TapMailchimp.cli'
 [tool.ruff]
 line-length = 88
 src = ["tap_mailchimp", "tests", "noxfile.py"]
-target-version = "py37"
+target-version = "py38"
 
 [tool.ruff.lint]
 ignore = [
