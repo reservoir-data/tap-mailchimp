@@ -8,9 +8,6 @@ from requests.auth import HTTPBasicAuth
 from singer_sdk.pagination import BaseOffsetPaginator
 from singer_sdk.streams import RESTStream
 
-if t.TYPE_CHECKING:
-    import requests
-
 
 class MailchimpPaginator(BaseOffsetPaginator):
     """Mailchimp paginator."""
@@ -25,19 +22,6 @@ class MailchimpPaginator(BaseOffsetPaginator):
         """
         super().__init__(*args, **kwargs)
         self.name = name
-
-    def has_more(self, response: requests.Response) -> bool:
-        """Whether there are more pages to paginate.
-
-        Args:
-            response: HTTP response.
-
-        Returns:
-            True if there are more pages to paginate, False otherwise.
-        """
-        count = len(response.json()[self.name])
-        current_offset = self.current_value
-        return current_offset + self._page_size if count == self._page_size else None
 
 
 class MailchimpStream(RESTStream):
