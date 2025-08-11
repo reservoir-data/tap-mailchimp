@@ -2,9 +2,19 @@
 
 from __future__ import annotations
 
+import sys
 import typing as t
 
 from tap_mailchimp.client import MailchimpStream
+
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
+
+
+if t.TYPE_CHECKING:
+    from singer_sdk.helpers.types import Context
 
 
 class ListsStream(MailchimpStream):
@@ -13,10 +23,11 @@ class ListsStream(MailchimpStream):
     name = "lists"
     path = "/lists"
 
+    @override
     def get_child_context(
         self,
         record: dict,
-        context: dict | None,  # noqa: ARG002
+        context: Context | None,
     ) -> dict:
         """Get the child context for child streams."""
         return {"list_id": record["id"]}
@@ -35,7 +46,7 @@ class MergeFieldsStream(MailchimpStream):
 
     name = "merge_fields"
     path = "/lists/{list_id}/merge-fields"
-    primary_keys: t.ClassVar[list[str]] = ["merge_id"]
+    primary_keys: t.ClassVar[tuple[str, ...]] = ("merge_id",)
     parent_stream_type = ListsStream
 
 

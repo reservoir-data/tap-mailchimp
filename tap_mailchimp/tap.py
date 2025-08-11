@@ -2,35 +2,18 @@
 
 from __future__ import annotations
 
-import typing as t
+import sys
 
-import requests
 import requests_cache
 from singer_sdk import Stream, Tap
 from singer_sdk import typing as th
-from toolz.dicttoolz import get_in
 
-from tap_mailchimp.streams import (
-    CampaignsStream,
-    ConversationsStream,
-    ListsStream,
-    MembersStream,
-    MergeFieldsStream,
-    TemplatesStream,
-)
+from tap_mailchimp import streams
 
-if t.TYPE_CHECKING:
-    from tap_mailchimp.client import MailchimpStream
-
-OPENAPI_URL = "https://api.mailchimp.com/schema/3.0/Swagger.json?expand"
-STREAM_TYPES: list[type[MailchimpStream]] = [
-    CampaignsStream,
-    ConversationsStream,
-    ListsStream,
-    MembersStream,
-    MergeFieldsStream,
-    TemplatesStream,
-]
+if sys.version_info >= (3, 12):
+    from typing import override
+else:
+    from typing_extensions import override
 
 requests_cache.install_cache("requests_cache")
 
@@ -43,7 +26,7 @@ class TapMailchimp(Tap):
     config_jsonschema = th.PropertiesList(
         th.Property(
             "server",
-            th.StringType,
+            th.StringType(nullable=False),
             required=True,
             description=(
                 "To find the value for the server parameter used in "
@@ -55,39 +38,21 @@ class TapMailchimp(Tap):
         ),
         th.Property(
             "api_key",
-            th.StringType,
+            th.StringType(nullable=False),
+            required=True,
+            secret=True,
             description="API key to grant access to your Mailchimp account",
         ),
     ).to_dict()
 
-    def get_openapi_schema(self) -> dict:
-        """Retrieve Swagger/OpenAPI schema for this API.
-
-        Returns:
-            OpenAPI schema.
-        """
-        return requests.get(OPENAPI_URL, timeout=10).json()
-
+    @override
     def discover_streams(self) -> list[Stream]:
         """Return a list of discovered streams."""
-        openapi_schema = self.get_openapi_schema()
-
-        streams: list[MailchimpStream] = []
-        for stream_type in STREAM_TYPES:
-            schema = get_in(
-                keys=[
-                    "paths",
-                    stream_type.path,
-                    "get",
-                    "responses",
-                    "200",
-                    "schema",
-                    "properties",
-                    stream_type.name,
-                    "items",
-                ],
-                coll=openapi_schema,
-            )
-            streams.append(stream_type(tap=self, schema=schema))
-
-        return sorted(streams, key=lambda x: x.name)
+        return [
+            streams.CampaignsStream(tap=self),
+            streams.ConversationsStream(tap=self),
+            streams.ListsStream(tap=self),
+            streams.MembersStream(tap=self),
+            streams.MergeFieldsStream(tap=self),
+            streams.TemplatesStream(tap=self),
+        ]

@@ -1,56 +1,69 @@
-[tool.poetry]
+[build-system]
+build-backend = "hatchling.build"
+
+requires = [ "hatchling" ]
+
+[project]
 name = "tap-mailchimp"
 version = "0.0.1"
-description = "`tap-mailchimp` is a Singer tap for Mailchimp, built with the Meltano SDK for Singer Taps."
-authors = [
-    "Edgar Ramírez-Mondragón <edgarrm358@gmail.com>"
-]
+description = "Singer tap for Mailchimp, built with the Meltano SDK for Singer Taps."
 keywords = [
-    "ELT",
-    "Mailchimp",
+  "ELT",
+  "Mailchimp",
 ]
 license = "Apache-2.0"
+authors = [ { name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" } ]
+requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+]
+dependencies = [
+  "requests-cache==1.2.*",
+  "singer-sdk==0.48.*",
+  "toolz==0.12.*",
+  "typing-extensions>=4.14.1; python_full_version<'3.12'",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.7.1,<4"
-singer-sdk = "==0.34.*"
-toolz = "==0.12.*"
-requests-cache = "==1.1.*"
+scripts.tap-mailchimp = "tap_mailchimp.tap:TapMailchimp.cli"
 
-[tool.poetry.dev-dependencies]
-pytest = "~=7.4"
-
-[tool.black]
-line-length = 88
-
-[tool.isort]
-profile = "black"
-multi_line_output = 3 # Vertical Hanging Indent
-src_paths = "tap_mailchimp"
-
-[build-system]
-requires = ["poetry-core>=1.0.8"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.scripts]
-# CLI declaration
-tap-mailchimp = 'tap_mailchimp.tap:TapMailchimp.cli'
+[dependency-groups]
+dev = [
+  { include-group = "testing" },
+  { include-group = "typing" },
+]
+ci = [
+  "pytest-github-actions-annotate-failures>=0.3",
+]
+testing = [
+  "pytest~=8.4",
+]
+typing = [
+  "mypy>=1.17.1",
+  "ty>=0.0.1a17",
+  "types-requests>=2.32.4.20250809",
+]
 
 [tool.ruff]
+target-version = "py310"
 line-length = 88
-src = ["tap_mailchimp", "tests", "noxfile.py"]
-target-version = "py37"
+src = [ "noxfile.py", "tap_mailchimp", "tests" ]
+lint.select = [ "ALL" ]
+lint.ignore = [ "DJ", "PD" ]
+lint.per-file-ignores."noxfile.py" = [ "ANN" ]
+lint.per-file-ignores."tests/*" = [ "ANN" ]
+lint.isort.known-first-party = [ "tap_mailchimp" ]
+lint.pydocstyle.convention = "google"
 
-[tool.ruff.lint]
-ignore = ["ANN101", "DJ", "PD"]
-select = ["ALL"]
+[tool.pyproject-fmt]
+max_supported_python = "3.14"
 
-[tool.ruff.lint.isort]
-known-first-party = ["tap_mailchimp"]
-
-[tool.ruff.lint.per-file-ignores]
-"noxfile.py" = ["ANN"]
-"tests/*" = ["ANN"]
-
-[tool.ruff.lint.pydocstyle]
-convention = "google"
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+  "toolz.*",
+]

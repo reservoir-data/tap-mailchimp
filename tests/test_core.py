@@ -2,17 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any
-
-from singer_sdk.testing import get_standard_tap_tests
+from singer_sdk.testing import SuiteConfig, get_tap_test_class
 
 from tap_mailchimp.tap import TapMailchimp
 
-SAMPLE_CONFIG: dict[str, Any] = {}
-
-
-def test_standard_tap_tests():
-    """Run standard tap tests from the SDK."""
-    tests = get_standard_tap_tests(TapMailchimp, config=SAMPLE_CONFIG)
-    for test in tests:
-        test()
+TestTapMailchimp = get_tap_test_class(
+    TapMailchimp,
+    suite_config=SuiteConfig(
+        ignore_no_records_for_streams=[
+            "conversations",
+            "lists",
+            "merge_fields",
+        ],
+    ),
+)
