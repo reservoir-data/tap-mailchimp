@@ -26,8 +26,16 @@ class ResponseKey(t.NamedTuple):
     """Response key."""
 
     path: str
+    """Endpoint for the resource."""
+
+    name: str
+    """Stream/resource name."""
+
     http_method: str
+    """HTTP method for the resource."""
+
     expected_status: int = 200
+    """Expected status code for the resource."""
 
 
 class MailchimpOpenAPISchema(OpenAPISchema[ResponseKey]):
@@ -43,17 +51,36 @@ class MailchimpOpenAPISchema(OpenAPISchema[ResponseKey]):
                 "responses",
                 str(key.expected_status),
                 "schema",
+                "properties",
+                key.name,
                 "items",
             ),
             coll=self.spec,
         )
 
 
+class MailchimpStreamSchema(StreamSchema[ResponseKey]):
+    """Mailchimp stream schema."""
+
+    @override
+    def get_stream_schema(
+        self,
+        stream: MailchimpStream,  # type: ignore[override]
+        stream_class: type[MailchimpStream],  # type: ignore[override]
+    ) -> dict[str, t.Any]:
+        key = ResponseKey(
+            path=stream.path,
+            name=stream.name,
+            http_method=stream.http_method,
+        )
+        return self.schema_source.fetch_schema(key)
+
+
 class MailchimpStream(RESTStream):
     """Base stream class for all Mailchimp resources."""
 
     primary_keys: t.ClassVar[tuple[str, ...]] = ("id",)
-    schema = StreamSchema(MailchimpOpenAPISchema(OPENAPI_URL))  # type: ignore[assignment]
+    schema = MailchimpStreamSchema(MailchimpOpenAPISchema(OPENAPI_URL))  # type: ignore[assignment]
 
     @property
     @override
