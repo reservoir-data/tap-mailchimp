@@ -16,6 +16,7 @@ else:
 if t.TYPE_CHECKING:
     from singer_sdk.helpers.types import Context
 
+
 class ListsStream(MailchimpStream):
     """Lists stream."""
 
