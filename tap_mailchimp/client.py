@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 import typing as t
+from copy import deepcopy
 
 from requests.auth import HTTPBasicAuth
 from singer_sdk import OpenAPISchema, RESTStream, StreamSchema
@@ -59,6 +60,20 @@ class MailchimpOpenAPISchema(OpenAPISchema[ResponseKey]):
         )
 
 
+def _make_nullable(
+    schema: t.Any,  # noqa: ANN401
+    *,
+    key_properties: tuple[str, ...] = (),
+) -> dict[str, t.Any]:
+    """Make non-key properties in the schema nullable."""
+    new_schema = deepcopy(schema)
+    for key, value in new_schema.get("properties", {}).items():
+        if key in key_properties or "type" not in value:
+            continue
+        new_schema["properties"][key]["type"] = [value["type"], "null"]
+    return new_schema
+
+
 class MailchimpStreamSchema(StreamSchema[ResponseKey]):
     """Mailchimp stream schema."""
 
@@ -73,7 +88,10 @@ class MailchimpStreamSchema(StreamSchema[ResponseKey]):
             name=stream.name,
             http_method=stream.http_method,
         )
-        return self.schema_source.fetch_schema(key)
+        return _make_nullable(
+            self.schema_source.fetch_schema(key),
+            key_properties=stream.primary_keys,  # type: ignore[arg-type]
+        )
 
 
 class MailchimpStream(RESTStream):
