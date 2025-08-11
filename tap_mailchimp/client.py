@@ -78,6 +78,11 @@ class MailchimpStreamSchema(StreamSchema[ResponseKey]):
     """Mailchimp stream schema."""
 
     @override
+    def __init__(self, *args: t.Any, **kwargs: t.Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._schemas: dict[ResponseKey, dict[str, t.Any]] = {}
+
+    @override
     def get_stream_schema(
         self,
         stream: MailchimpStream,  # type: ignore[override]
@@ -88,10 +93,19 @@ class MailchimpStreamSchema(StreamSchema[ResponseKey]):
             name=stream.name,
             http_method=stream.http_method,
         )
-        return _make_nullable(
-            self.schema_source.fetch_schema(key),
+        if schema := self._schemas.get(key):
+            return schema
+
+        raw_schema = self.schema_source.fetch_schema(key)
+        if stream.name == "members":
+            raw_schema["properties"]["sms_subscription_status"]["enum"].append("")
+
+        schema = _make_nullable(
+            raw_schema,
             key_properties=stream.primary_keys,  # type: ignore[arg-type]
         )
+        self._schemas[key] = schema
+        return schema
 
 
 class MailchimpStream(RESTStream):
