@@ -26,6 +26,7 @@ dependencies = [
   "requests-cache==1.2.*",
   "singer-sdk==0.48.*",
   "toolz==0.12.*",
+  "typing-extensions>=4.14.1; python_full_version<'3.12'",
 ]
 
 scripts.tap-mailchimp = "tap_mailchimp.tap:TapMailchimp.cli"
@@ -33,12 +34,18 @@ scripts.tap-mailchimp = "tap_mailchimp.tap:TapMailchimp.cli"
 [dependency-groups]
 dev = [
   { include-group = "testing" },
+  { include-group = "typing" },
 ]
 ci = [
   "pytest-github-actions-annotate-failures>=0.3",
 ]
 testing = [
   "pytest~=8.4",
+]
+typing = [
+  "mypy>=1.17.1",
+  "ty>=0.0.1a17",
+  "types-requests>=2.32.4.20250809",
 ]
 
 [tool.ruff]
@@ -54,3 +61,9 @@ lint.pydocstyle.convention = "google"
 
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+  "toolz.*",
+]
