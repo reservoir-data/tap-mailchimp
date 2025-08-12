@@ -843,6 +843,7 @@ name = "tap-mailchimp"
 version = "0.0.1"
 source = { editable = "." }
 dependencies = [
+    { name = "requests" },
     { name = "requests-cache" },
     { name = "singer-sdk" },
     { name = "toolz" },
@@ -869,6 +870,7 @@ typing = [
 
 [package.metadata]
 requires-dist = [
+    { name = "requests", specifier = "~=2.32.4" },
     { name = "requests-cache", specifier = "==1.2.*" },
     { name = "singer-sdk", specifier = "==0.48.*" },
     { name = "toolz", specifier = "==0.12.*" },
