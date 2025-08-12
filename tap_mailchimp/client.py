@@ -97,8 +97,11 @@ class MailchimpStreamSchema(StreamSchema[ResponseKey]):
             return schema
 
         raw_schema = self.schema_source.fetch_schema(key)
-        if stream.name == "members":
-            raw_schema["properties"]["sms_subscription_status"]["enum"].append("")
+        match stream.name:
+            case "members":
+                raw_schema["properties"]["sms_subscription_status"]["enum"].append("")
+            case _:
+                pass
 
         schema = _make_nullable(
             raw_schema,
