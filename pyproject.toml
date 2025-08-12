@@ -49,10 +49,9 @@ typing = [
 [tool.ruff]
 target-version = "py310"
 line-length = 88
-src = [ "noxfile.py", "tap_mailchimp", "tests" ]
+src = [ "tap_mailchimp", "tests" ]
 lint.select = [ "ALL" ]
 lint.ignore = [ "DJ", "PD" ]
-lint.per-file-ignores."noxfile.py" = [ "ANN" ]
 lint.per-file-ignores."tests/*" = [ "ANN" ]
 lint.isort.known-first-party = [ "tap_mailchimp" ]
 lint.pydocstyle.convention = "google"
