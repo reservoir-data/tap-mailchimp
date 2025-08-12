@@ -850,17 +850,16 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
-ci = [
-    { name = "pytest-github-actions-annotate-failures" },
-]
 dev = [
     { name = "mypy" },
     { name = "pytest" },
+    { name = "pytest-github-actions-annotate-failures" },
     { name = "ty" },
     { name = "types-requests" },
 ]
 testing = [
     { name = "pytest" },
+    { name = "pytest-github-actions-annotate-failures" },
 ]
 typing = [
     { name = "mypy" },
@@ -877,14 +876,17 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
-ci = [{ name = "pytest-github-actions-annotate-failures", specifier = ">=0.3" }]
 dev = [
     { name = "mypy", specifier = ">=1.17.1" },
     { name = "pytest", specifier = "~=8.4" },
+    { name = "pytest-github-actions-annotate-failures", specifier = ">=0.3" },
     { name = "ty", specifier = ">=0.0.1a17" },
     { name = "types-requests", specifier = ">=2.32.4.20250809" },
 ]
-testing = [{ name = "pytest", specifier = "~=8.4" }]
+testing = [
+    { name = "pytest", specifier = "~=8.4" },
+    { name = "pytest-github-actions-annotate-failures", specifier = ">=0.3" },
+]
 typing = [
     { name = "mypy", specifier = ">=1.17.1" },
     { name = "ty", specifier = ">=0.0.1a17" },

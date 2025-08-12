@@ -36,11 +36,9 @@ dev = [
   { include-group = "testing" },
   { include-group = "typing" },
 ]
-ci = [
-  "pytest-github-actions-annotate-failures>=0.3",
-]
 testing = [
   "pytest~=8.4",
+  "pytest-github-actions-annotate-failures>=0.3",
 ]
 typing = [
   "mypy>=1.17.1",
@@ -66,4 +64,40 @@ max_supported_python = "3.14"
 ignore_missing_imports = true
 module = [
   "toolz.*",
+]
+
+[tool.tox]
+min_version = "4.22"
+requires = [
+  "tox~=4.22",
+  "tox-uv~=1.17",
+]
+env_list = [
+  "dependencies",
+  "typing",
+  "3.14",
+  "3.13",
+  "3.12",
+  "3.11",
+  "3.10",
+]
+
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+pass_env = [ "TAP_MAILCHIMP_*" ]
+dependency_groups = [ "testing" ]
+commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+
+[tool.tox.env.dependencies]
+dependency_groups = [ "testing" ]
+commands = [ [ "deptry", "." ] ]
+
+[tool.tox.env.sync]
+commands = [ [ "tap-mailchimp", { replace = "posargs", default = [ "--config=ENV" ], extend = true } ] ]
+
+[tool.tox.env.typing]
+dependency_groups = [ "testing", "typing" ]
+commands = [
+  [ "mypy", "--strict", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
+  [ "ty", "check", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
 ]

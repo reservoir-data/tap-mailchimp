@@ -71,7 +71,7 @@ def _make_nullable(
         if key in key_properties or "type" not in value:
             continue
         new_schema["properties"][key]["type"] = [value["type"], "null"]
-    return new_schema
+    return new_schema  # type: ignore[no-any-return]
 
 
 class MailchimpStreamSchema(StreamSchema[ResponseKey]):
@@ -105,17 +105,17 @@ class MailchimpStreamSchema(StreamSchema[ResponseKey]):
 
         schema = _make_nullable(
             raw_schema,
-            key_properties=stream.primary_keys,  # type: ignore[arg-type]
+            key_properties=stream.primary_keys,  # ty: ignore[invalid-argument-type]
         )
         self._schemas[key] = schema
         return schema
 
 
-class MailchimpStream(RESTStream):
+class MailchimpStream(RESTStream[int]):
     """Base stream class for all Mailchimp resources."""
 
     primary_keys: t.ClassVar[tuple[str, ...]] = ("id",)
-    schema = MailchimpStreamSchema(MailchimpOpenAPISchema(OPENAPI_URL))  # type: ignore[assignment]
+    schema = MailchimpStreamSchema(MailchimpOpenAPISchema(OPENAPI_URL))
 
     @property
     @override
