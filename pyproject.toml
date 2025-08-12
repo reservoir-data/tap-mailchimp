@@ -59,6 +59,20 @@ lint.pydocstyle.convention = "google"
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
 
+[tool.mypy]
+enable_error_code = [
+  "exhaustive-match",
+  "ignore-without-code",
+  "redundant-expr",
+  "truthy-bool",
+]
+warn_redundant_casts = true
+warn_return_any = true
+warn_no_return = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
