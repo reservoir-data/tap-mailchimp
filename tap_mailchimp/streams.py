@@ -14,7 +14,7 @@ else:
 
 
 if t.TYPE_CHECKING:
-    from singer_sdk.helpers.types import Context
+    from singer_sdk.helpers.types import Context, Record
 
 
 class ListsStream(MailchimpStream):
@@ -26,9 +26,9 @@ class ListsStream(MailchimpStream):
     @override
     def get_child_context(
         self,
-        record: dict,
+        record: Record,
         context: Context | None,
-    ) -> dict:
+    ) -> Context:
         """Get the child context for child streams."""
         return {"list_id": record["id"]}
 

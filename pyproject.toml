@@ -23,6 +23,7 @@ classifiers = [
   "Programming Language :: Python :: 3.14",
 ]
 dependencies = [
+  "requests~=2.32.4",
   "requests-cache==1.2.*",
   "singer-sdk==0.48.*",
   "toolz==0.12.*",
@@ -36,11 +37,9 @@ dev = [
   { include-group = "testing" },
   { include-group = "typing" },
 ]
-ci = [
-  "pytest-github-actions-annotate-failures>=0.3",
-]
 testing = [
   "pytest~=8.4",
+  "pytest-github-actions-annotate-failures>=0.3",
 ]
 typing = [
   "mypy>=1.17.1",
@@ -51,10 +50,9 @@ typing = [
 [tool.ruff]
 target-version = "py310"
 line-length = 88
-src = [ "noxfile.py", "tap_mailchimp", "tests" ]
+src = [ "tap_mailchimp", "tests" ]
 lint.select = [ "ALL" ]
 lint.ignore = [ "DJ", "PD" ]
-lint.per-file-ignores."noxfile.py" = [ "ANN" ]
 lint.per-file-ignores."tests/*" = [ "ANN" ]
 lint.isort.known-first-party = [ "tap_mailchimp" ]
 lint.pydocstyle.convention = "google"
@@ -62,8 +60,58 @@ lint.pydocstyle.convention = "google"
 [tool.pyproject-fmt]
 max_supported_python = "3.14"
 
+[tool.mypy]
+enable_error_code = [
+  "exhaustive-match",
+  "ignore-without-code",
+  "redundant-expr",
+  "truthy-bool",
+]
+warn_redundant_casts = true
+warn_return_any = true
+warn_no_return = true
+warn_unreachable = true
+warn_unused_configs = true
+warn_unused_ignores = true
+
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
   "toolz.*",
+]
+
+[tool.tox]
+min_version = "4.22"
+requires = [
+  "tox~=4.22",
+  "tox-uv~=1.17",
+]
+env_list = [
+  "dependencies",
+  "typing",
+  "3.14",
+  "3.13",
+  "3.12",
+  "3.11",
+  "3.10",
+]
+
+[tool.tox.env_run_base]
+runner = "uv-venv-lock-runner"
+pass_env = [ "TAP_MAILCHIMP_*" ]
+dependency_groups = [ "testing" ]
+commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
+
+[tool.tox.env.dependencies]
+dependency_groups = [ "testing" ]
+commands = [ [ "deptry", "." ] ]
+
+[tool.tox.env.sync]
+commands = [ [ "tap-mailchimp", { replace = "posargs", default = [ "--config=ENV" ], extend = true } ] ]
+
+[tool.tox.env.typing]
+dependency_groups = [ "testing", "typing" ]
+commands = [
+  [ "mypy", "--strict", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
+  [ "ty", "check", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
 ]
