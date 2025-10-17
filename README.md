@@ -38,8 +38,6 @@ tap-mailchimp --config CONFIG --discover > ./catalog.json
 
 ## Developer Resources
 
-- [ ] `Developer TODO:` As a first step, scan the entire project for the text "`TODO:`" and complete any recommended steps, deleting the "TODO" references once completed.
-
 ### Initialize your Development Environment
 
 ```bash
@@ -67,26 +65,14 @@ poetry run tap-mailchimp --help
 _**Note:** This tap will work in any Singer environment and does not require Meltano.
 Examples here are for convenience and to streamline end-to-end orchestration scenarios._
 
-Your project comes with a custom `meltano.yml` project file already created. Open the `meltano.yml` and follow any _"TODO"_ items listed in
-the file.
-
-Next, install Meltano (if you haven't already) and any needed plugins:
-
-```bash
-# Install meltano
-pipx install meltano
-# Initialize meltano within this directory
-cd tap-mailchimp
-meltano install
-```
-
-Now you can test and orchestrate using Meltano:
+Use Meltano to run an EL pipeline:
 
 ```bash
 # Test invocation:
-meltano invoke tap-mailchimp --version
+uvx meltano invoke tap-mailchimp --version
+
 # OR run a test `elt` pipeline:
-meltano elt tap-mailchimp target-jsonl
+uvx meltano run tap-mailchimp target-jsonl
 ```
 
 ### SDK Dev Guide
