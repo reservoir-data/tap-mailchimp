@@ -40,24 +40,24 @@ tap-mailchimp --config CONFIG --discover > ./catalog.json
 
 ### Initialize your Development Environment
 
+[Install uv](https://docs.astral.sh/uv/getting-started/installation/) and then install this project's dependencies:
+
 ```bash
-pipx install poetry
-poetry install
+uv sync
 ```
 
 ### Create and Run Tests
 
-Create tests within the `tap_mailchimp/tests` subfolder and
-  then run:
+Create tests within the `tap_mailchimp/tests` subfolder and then run:
 
 ```bash
-poetry run pytest
+uv run pytest
 ```
 
-You can also test the `tap-mailchimp` CLI interface directly using `poetry run`:
+You can also test the `tap-mailchimp` CLI interface directly using `uv run`:
 
 ```bash
-poetry run tap-mailchimp --help
+uv run tap-mailchimp --help
 ```
 
 ### Testing with [Meltano](https://www.meltano.com)
