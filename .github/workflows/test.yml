@@ -96,5 +96,5 @@ jobs:
 
     - run: >
         uvx
-        --with prex==${{ env.PREK_VERSION }}
+        --with prek==${{ env.PREK_VERSION }}
         prek run --show-diff-on-failure --all-files
