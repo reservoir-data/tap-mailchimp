@@ -8,7 +8,7 @@ on:
 env:
   FORCE_COLOR: "1"
   # renovate: datasource=pypi depName=prek
-  PREK_VERSION: 0.2.3
+  PREK_VERSION: 0.2.9
   # renovate: datasource=pypi depName=uv
   UV_VERSION: 0.9.3
   # renovate: datasource=pypi depName=tox
@@ -96,5 +96,5 @@ jobs:
 
     - run: >
         uvx
-        --with prex==${{ env.PREK_VERSION }}
+        --with prek==${{ env.PREK_VERSION }}
         prek run --show-diff-on-failure --all-files
