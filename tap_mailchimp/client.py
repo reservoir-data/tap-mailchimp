@@ -2,19 +2,14 @@
 
 from __future__ import annotations
 
-import sys
 import typing as t
 from copy import deepcopy
+from typing import override
 
 from requests.auth import HTTPBasicAuth
 from singer_sdk import OpenAPISchema, RESTStream, StreamSchema
 from singer_sdk.pagination import BaseOffsetPaginator
 from toolz.dicttoolz import get_in
-
-if sys.version_info >= (3, 12):
-    from typing import override
-else:
-    from typing_extensions import override
 
 if t.TYPE_CHECKING:
     from singer_sdk.helpers.types import Context
