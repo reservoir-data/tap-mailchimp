@@ -39,7 +39,7 @@ class MailchimpOpenAPISchema(OpenAPISchema[ResponseKey]):
 
     @override
     def get_unresolved_schema(self, key: ResponseKey) -> dict[str, t.Any]:
-        return get_in(  # type: ignore[no-any-return]
+        return get_in(
             keys=(
                 "paths",
                 key.path,
@@ -52,7 +52,7 @@ class MailchimpOpenAPISchema(OpenAPISchema[ResponseKey]):
                 "items",
             ),
             coll=self.spec,
-        )
+        )  # ty:ignore[invalid-return-type]
 
 
 def _make_nullable(
