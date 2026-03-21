@@ -25,17 +25,17 @@ Built with the [Meltano SDK](https://sdk.meltano.com) for Singer Taps and Target
 
 ## Capabilities
 
-* `sync`
-* `catalog`
-* `state` (TODO)
-* `discover`
+- `sync`
+- `catalog`
+- `state` (TODO)
+- `discover`
 
 ## Settings
 
 | Setting| Required | Default | Description |
 |:-------|:--------:|:-------:|:------------|
-| server | False    | None    | To find the value for the server parameter used in `mailchimp.setConfig`, log into your Mailchimp account and look at the URL in your browser. You’ll see something like `https://us19.admin.mailchimp.com/`; the `us19` part is the server prefix. Note that your specific value may be different. |
-| api_key| False    | None    | API key to grant access to your Mailchimp account |
+| server | False | None | To find the value for the server parameter used in `mailchimp.setConfig`, log into your Mailchimp account and look at the URL in your browser. You’ll see something like `https://us19.admin.mailchimp.com/`; the `us19` part is the server prefix. Note that your specific value may be different. |
+| api_key| False | None | API key to grant access to your Mailchimp account |
 
 A full list of supported settings and capabilities is available by running: `tap-mailchimp --about`
 

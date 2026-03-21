@@ -1,18 +1,16 @@
 [build-system]
 build-backend = "hatchling.build"
-
-requires = [ "hatchling" ]
+requires = [ "hatch-vcs", "hatchling" ]
 
 [project]
 name = "tap-mailchimp"
-version = "0.0.1"
 description = "Singer tap for Mailchimp, built with the Meltano SDK for Singer Taps."
+readme = "README.md"
 keywords = [
   "ELT",
   "Mailchimp",
 ]
 license = "Apache-2.0"
-authors = [ { name = "Edgar Ramírez-Mondragón", email = "edgarrm358@gmail.com" } ]
 requires-python = ">=3.12"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
@@ -20,14 +18,18 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
 ]
+dynamic = [ "version" ]
 dependencies = [
   "requests~=2.32.4",
-  "requests-cache==1.3.*",
-  "singer-sdk==0.53.*",
-  "toolz==1.1.*",
+  "requests-cache~=1.3.1",
+  "singer-sdk~=0.53.6",
+  "toolz~=1.1.0",
 ]
-
-scripts.tap-mailchimp = "tap_mailchimp.tap:TapMailchimp.cli"
+[[project.authors]]
+name = "Edgar Ramírez-Mondragón"
+email = "edgarrm358@gmail.com"
+[project.scripts]
+tap-mailchimp = "tap_mailchimp.tap:TapMailchimp.cli"
 
 [dependency-groups]
 dev = [
@@ -35,27 +37,33 @@ dev = [
   { include-group = "typing" },
 ]
 testing = [
-  "deptry>=0.24.0",
+  "deptry>=0.24",
   "pytest~=9.0",
   "pytest-github-actions-annotate-failures>=0.3",
 ]
 typing = [
-  "mypy>=1.17.1",
-  "ty>=0.0.1a17",
+  "mypy>=1.19",
+  "toolz-stubs>=0.4",
+  "ty>=0.0.23",
   "types-requests>=2.32.4.20250809",
 ]
+
+[tool.hatch.version]
+fallback-version = "0.1.0.dev0"
+source = "vcs"
 
 [tool.ruff]
 line-length = 88
 src = [ "tap_mailchimp", "tests" ]
-lint.select = [ "ALL" ]
-lint.ignore = [ "DJ", "PD" ]
-lint.per-file-ignores."tests/*" = [ "ANN" ]
-lint.isort.known-first-party = [ "tap_mailchimp" ]
-lint.pydocstyle.convention = "google"
+[tool.ruff.lint]
+select = [ "ALL" ]
+ignore = [ "DJ", "PD" ]
+per-file-ignores."tests/*" = [ "ANN" ]
+isort.known-first-party = [ "tap_mailchimp" ]
+pydocstyle.convention = "google"
 
 [tool.pyproject-fmt]
-max_supported_python = "3.14"
+table_format = "long"
 
 [tool.mypy]
 enable_error_code = [
@@ -64,6 +72,7 @@ enable_error_code = [
   "redundant-expr",
   "truthy-bool",
 ]
+strict = true
 warn_redundant_casts = true
 warn_return_any = true
 warn_no_return = true
@@ -71,24 +80,43 @@ warn_unreachable = true
 warn_unused_configs = true
 warn_unused_ignores = true
 
-[[tool.mypy.overrides]]
-ignore_missing_imports = true
-module = [
-  "toolz.*", # https://github.com/pytoolz/toolz/issues/496
+[tool.ty.rules]
+unused-type-ignore-comment = "ignore"
+
+[tool.pytest]
+addopts = [ "-v", "-ra" ]
+filterwarnings = [
+  "error",
+  "once:Fields in transformed catalog but not in records:UserWarning",
 ]
+log_level = "INFO"
+minversion = "9"
+strict = true
+testpaths = [ "tests" ]
 
 [tool.tox]
-min_version = "4.22"
+min_version = "4.43"
 requires = [
-  "tox~=4.22",
+  "tox~=4.43",
   "tox-uv~=1.17",
 ]
 env_list = [
   "dependencies",
   "typing",
-  "3.14",
-  "3.13",
-  "3.12",
+  { product = [
+    { prefix = "3.", start = 12 },
+  ] },
+]
+[tool.tox.env.dependencies]
+dependency_groups = [ "testing" ]
+commands = [ [ "deptry", "." ] ]
+[tool.tox.env.sync]
+commands = [ [ "tap-mailchimp", { replace = "posargs", default = [ "--config=ENV" ], extend = true } ] ]
+[tool.tox.env.typing]
+dependency_groups = [ "testing", "typing" ]
+commands = [
+  [ "mypy", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
+  [ "ty", "check", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
 ]
 
 [tool.tox.env_run_base]
@@ -96,17 +124,3 @@ runner = "uv-venv-lock-runner"
 pass_env = [ "TAP_MAILCHIMP_*" ]
 dependency_groups = [ "testing" ]
 commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
-
-[tool.tox.env.dependencies]
-dependency_groups = [ "testing" ]
-commands = [ [ "deptry", "." ] ]
-
-[tool.tox.env.sync]
-commands = [ [ "tap-mailchimp", { replace = "posargs", default = [ "--config=ENV" ], extend = true } ] ]
-
-[tool.tox.env.typing]
-dependency_groups = [ "testing", "typing" ]
-commands = [
-  [ "mypy", "--strict", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
-  [ "ty", "check", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
-]
