@@ -8,7 +8,7 @@ from typing import override
 
 from requests.auth import HTTPBasicAuth
 from singer_sdk import OpenAPISchema, RESTStream, StreamSchema
-from singer_sdk.pagination import BaseOffsetPaginator
+from singer_sdk.pagination import OffsetPaginator
 from toolz.dicttoolz import get_in
 
 if t.TYPE_CHECKING:
@@ -163,6 +163,6 @@ class MailchimpStream(RESTStream[int]):
 
         return []
 
-    def get_new_paginator(self) -> BaseOffsetPaginator:
+    def get_new_paginator(self) -> OffsetPaginator:
         """Return a new paginator."""
-        return BaseOffsetPaginator(start_value=0, page_size=self._page_size)
+        return OffsetPaginator(start_value=0, page_size=self._page_size)
