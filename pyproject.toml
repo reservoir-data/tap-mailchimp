@@ -20,7 +20,7 @@ classifiers = [
 ]
 dynamic = [ "version" ]
 dependencies = [
-  "requests~=2.32.4",
+  "requests~=2.33.0",
   "requests-cache~=1.3.1",
   "singer-sdk~=0.54.0a8",
   "toolz~=1.1.0",
