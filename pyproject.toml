@@ -54,13 +54,27 @@ source = "vcs"
 
 [tool.ruff]
 line-length = 88
-src = [ "tap_mailchimp", "tests" ]
 [tool.ruff.lint]
-select = [ "ALL" ]
-ignore = [ "DJ", "PD" ]
-per-file-ignores."tests/*" = [ "ANN" ]
-isort.known-first-party = [ "tap_mailchimp" ]
+select = [
+  "ALL",
+]
+ignore = [
+  "DJ",
+  "PD",
+]
+per-file-ignores."tests/*" = [
+  "ANN",
+]
+unfixable = [
+  "ERA001", # commented-out-code
+]
+flake8-annotations.allow-star-arg-any = true
 pydocstyle.convention = "google"
+
+[tool.deptry.package_module_name_map]
+mypy = "mypy"
+toolz-stubs = "toolz_stubs"
+ty = "ty"
 
 [tool.pyproject-fmt]
 table_format = "long"
