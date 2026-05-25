@@ -16,13 +16,13 @@ concurrency:
 env:
   FORCE_COLOR: "1"
   # renovate: datasource=pypi depName=prek
-  PREK_VERSION: 0.3.10
+  PREK_VERSION: 0.4.1
   # renovate: datasource=pypi depName=uv
-  UV_VERSION: 0.11.7
+  UV_VERSION: 0.11.16
   # renovate: datasource=pypi depName=tox
-  TOX_VERSION: 4.50.3
+  TOX_VERSION: 4.54.0
   # renovate: datasource=pypi depName=tox-uv
-  TOX_UV_VERSION: 1.33.4
+  TOX_UV_VERSION: 1.35.2
 
 jobs:
   build-package:
@@ -35,7 +35,7 @@ jobs:
         with:
           fetch-depth: 0
           persist-credentials: false
-      - uses: hynek/build-and-inspect-python-package@f3d069d0f9a3c9169d1a483318bb0e09876a6fd6 # v2.15.0
+      - uses: hynek/build-and-inspect-python-package@d44ca7d91762de7a7d5436ddae667c6da6d1c3df # v2.18.0
         id: baipp
 
   tests:
