@@ -94,24 +94,25 @@ strict = true
 testpaths = [ "tests" ]
 
 [tool.tox]
-min_version = "4.43"
 requires = [
-  "tox~=4.43",
-  "tox-uv~=1.17",
+  "tox>=4.53",
+  "tox-uv>=1.35",
 ]
 env_list = [
   "dependencies",
   "typing",
-  { product = [
-    { prefix = "3.", start = 12 },
-  ] },
+  { prefix = "3.", start = 12 },
 ]
 [tool.tox.env.dependencies]
+description = "check for unused, missing and transitive dependencies"
 dependency_groups = [ "testing" ]
 commands = [ [ "deptry", "." ] ]
 [tool.tox.env.sync]
+description = "run tap with sample data"
+base_python_file = [ ".python-version" ]
 commands = [ [ "tap-mailchimp", { replace = "posargs", default = [ "--config=ENV" ], extend = true } ] ]
 [tool.tox.env.typing]
+description = "type checks"
 dependency_groups = [ "testing", "typing" ]
 commands = [
   [ "mypy", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
@@ -119,6 +120,7 @@ commands = [
 ]
 
 [tool.tox.env_run_base]
+description = "run tests on Python {py_dot_ver}"
 runner = "uv-venv-lock-runner"
 pass_env = [ "TAP_MAILCHIMP_*" ]
 dependency_groups = [ "testing" ]
