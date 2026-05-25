@@ -833,7 +833,10 @@ testing = [
     { name = "pytest-github-actions-annotate-failures" },
 ]
 typing = [
+    { name = "deptry" },
     { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-github-actions-annotate-failures" },
     { name = "toolz-stubs" },
     { name = "ty" },
 ]
@@ -861,7 +864,10 @@ testing = [
     { name = "pytest-github-actions-annotate-failures", specifier = ">=0.3" },
 ]
 typing = [
+    { name = "deptry", specifier = ">=0.24" },
     { name = "mypy", specifier = ">=1.19" },
+    { name = "pytest", specifier = "~=9.0" },
+    { name = "pytest-github-actions-annotate-failures", specifier = ">=0.3" },
     { name = "toolz-stubs", specifier = ">=0.4" },
     { name = "ty", specifier = ">=0.0.23" },
 ]
