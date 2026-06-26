@@ -80,6 +80,11 @@ ty = "ty"
 table_format = "long"
 
 [tool.mypy]
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_return_any = true
+warn_unreachable = true
 enable_error_code = [
   "exhaustive-match",
   "ignore-without-code",
@@ -87,12 +92,7 @@ enable_error_code = [
   "truthy-bool",
 ]
 strict = true
-warn_no_return = true
-warn_redundant_casts = true
-warn_return_any = true
-warn_unreachable = true
 warn_unused_configs = true
-warn_unused_ignores = true
 
 [tool.ty.rules]
 unused-type-ignore-comment = "ignore"
@@ -120,25 +120,25 @@ env_list = [
 ]
 [tool.tox.env.dependencies]
 description = "check for unused, missing and transitive dependencies"
-labels = [ "check" ]
 dependency_groups = [ "testing" ]
 commands = [ [ "deptry", "." ] ]
+labels = [ "check" ]
 [tool.tox.env.sync]
 description = "run tap with sample data"
 base_python_file = [ ".python-version" ]
 commands = [ [ "tap-mailchimp", { replace = "posargs", default = [ "--config=ENV" ], extend = true } ] ]
 [tool.tox.env.typing]
 description = "type checks"
-labels = [ "check" ]
 dependency_groups = [ "typing" ]
 commands = [
   [ "mypy", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
   [ "ty", "check", { replace = "posargs", default = [ "tap_mailchimp", "tests" ], extend = true } ],
 ]
+labels = [ "check" ]
 
 [tool.tox.env_run_base]
-description = "run tests on Python {py_dot_ver}"
 runner = "uv-venv-lock-runner"
-pass_env = [ "TAP_MAILCHIMP_*" ]
+description = "run tests on Python {py_dot_ver}"
 dependency_groups = [ "testing" ]
+pass_env = [ "TAP_MAILCHIMP_*" ]
 commands = [ [ "pytest", { replace = "posargs", default = [ "tests" ], extend = true } ] ]
