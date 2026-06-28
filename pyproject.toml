@@ -33,18 +33,18 @@ tap-mailchimp = "tap_mailchimp.tap:TapMailchimp.cli"
 
 [dependency-groups]
 dev = [
+  "deptry>=0.25",
   { include-group = "testing" },
   { include-group = "typing" },
 ]
 testing = [
-  "deptry>=0.24",
   "pytest~=9.0",
   "pytest-github-actions-annotate-failures>=0.3",
 ]
 typing = [
-  "mypy>=1.19",
+  "mypy>=2.1",
   "toolz-stubs>=0.4",
-  "ty>=0.0.23",
+  "ty>=0.0.50",
   { include-group = "testing" },
 ]
 
@@ -70,11 +70,6 @@ unfixable = [
 ]
 flake8-annotations.allow-star-arg-any = true
 pydocstyle.convention = "google"
-
-[tool.deptry.package_module_name_map]
-mypy = "mypy"
-toolz-stubs = "toolz_stubs"
-ty = "ty"
 
 [tool.pyproject-fmt]
 table_format = "long"
@@ -120,7 +115,7 @@ env_list = [
 ]
 [tool.tox.env.dependencies]
 description = "check for unused, missing and transitive dependencies"
-dependency_groups = [ "testing" ]
+dependency_groups = [ "dev" ]
 commands = [ [ "deptry", "." ] ]
 labels = [ "check" ]
 [tool.tox.env.sync]
