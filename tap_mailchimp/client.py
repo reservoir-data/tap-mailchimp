@@ -1,4 +1,7 @@
-"""Mailchimp tap HTTP client."""
+"""Mailchimp tap HTTP client.
+
+Copyright (c) 2026 Edgar-Ramírez Mondragón
+"""
 
 from __future__ import annotations
 
