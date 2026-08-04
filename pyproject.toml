@@ -11,10 +11,9 @@ keywords = [
   "Mailchimp",
 ]
 license = "Apache-2.0"
-requires-python = ">=3.12"
+requires-python = ">=3.13"
 classifiers = [
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: 3.15",
@@ -113,7 +112,7 @@ requires = [
 env_list = [
   "dependencies",
   "typing",
-  { prefix = "3.", start = 12 },
+  { prefix = "3.", start = 13 },
 ]
 [tool.tox.env.dependencies]
 description = "check for unused, missing and transitive dependencies"
