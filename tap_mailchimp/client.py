@@ -55,13 +55,13 @@ class MailchimpOpenAPISchema(OpenAPISchema[ResponseKey]):
                 "items",
             ),
             coll=self.spec,
-        )  # ty:ignore[invalid-return-type]
+        )
 
 
 def _make_nullable(
     schema: t.Any,  # noqa: ANN401
     *,
-    key_properties: tuple[str, ...] = (),
+    key_properties: tuple[str, ...] | list[str] = (),
 ) -> dict[str, t.Any]:
     """Make non-key properties in the schema nullable."""
     new_schema = deepcopy(schema)
@@ -112,7 +112,7 @@ class MailchimpStreamSchema(StreamSchema[ResponseKey]):
 class MailchimpStream(RESTStream[int]):
     """Base stream class for all Mailchimp resources."""
 
-    primary_keys: t.ClassVar[tuple[str, ...]] = ("id",)
+    primary_keys: tuple[str, ...] | list[str] = ("id",)
     schema = MailchimpStreamSchema(MailchimpOpenAPISchema(OPENAPI_URL))
 
     @property

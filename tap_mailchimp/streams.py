@@ -43,7 +43,7 @@ class MergeFieldsStream(MailchimpStream):
 
     name = "merge_fields"
     path = "/lists/{list_id}/merge-fields"
-    primary_keys: t.ClassVar[tuple[str, ...]] = ("merge_id",)
+    primary_keys: tuple[str, ...] | list[str] = ("merge_id",)
     parent_stream_type = ListsStream
 
 
